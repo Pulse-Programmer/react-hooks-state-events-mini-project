@@ -4,31 +4,45 @@ import NewTaskForm from "./NewTaskForm";
 import TaskList from "./TaskList";
 
 import { CATEGORIES, TASKS } from "../data";
+
 // console.log("Here's the data you're working with");
 // console.log({ CATEGORIES, TASKS });
 
 function App() {
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [taskList, setTaskList] = useState(TASKS);
-  // const [displayList, setDisplayList] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  //tracks current state of tasks
+  const [taskList, setTaskList] = useState(() => TASKS);
+  //displays latest state from taskList
+  let [displayList, setDisplayList] = useState(() => TASKS);
 
+  //handle display of categories
   function handleClickBtn(category) {
     setSelectedCategory(category);
-    let displayTasks = TASKS.filter((task) => {
-      if (category === "All") return true;
-
-      return task.category === category;
-    });
-    setTaskList(displayTasks);
+    const displayTasks =
+      category === "All"
+        ? taskList
+        : taskList.filter((task) => task.category === category);
+    setDisplayList(displayTasks);
   }
 
+  //handle delete of items on list
   function handleDelete(id) {
-    let filteredList = taskList.filter((record, index) => index !== id);
-    setTaskList(filteredList);
+    setTaskList((prevTaskList) => {
+      const filteredList = prevTaskList.filter((_, index) => index !== id);
+      setDisplayList(filteredList);
+      return filteredList;
+    });
+    //setDisplayList(taskList);
   }
 
+  //handle add item on list
   function taskFormSubmit(formData) {
-    setTaskList([...taskList, formData]);
+    setTaskList((prevTaskList) => {
+      const updatedList = [...prevTaskList, formData];
+      setDisplayList(updatedList);
+      return updatedList;
+    });
+    //setDisplayList(taskList);
   }
 
   return (
@@ -40,7 +54,7 @@ function App() {
         onHandleClickBtn={handleClickBtn}
       />
       <NewTaskForm categories={CATEGORIES} onTaskFormSubmit={taskFormSubmit} />
-      <TaskList tasks={taskList} onHandleDelete={handleDelete} />
+      <TaskList tasks={displayList} onHandleDelete={handleDelete} />
     </div>
   );
 }

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 
 function NewTaskForm({ categories, onTaskFormSubmit }) {
-  // const [optionCat, setOptionCat] = useState("Code");
-  // const [inputText, setInputText] = useState("");
   const [formData, setFormData] = useState({
     text: "",
     category: "Code",
@@ -12,6 +10,7 @@ function NewTaskForm({ categories, onTaskFormSubmit }) {
     e.preventDefault();
 
     onTaskFormSubmit(formData);
+    setFormData({ text: "", category: "Code" }); // Reset form fields after submission
   }
 
   return (

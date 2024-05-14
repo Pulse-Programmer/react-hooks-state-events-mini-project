@@ -1,14 +1,16 @@
 import React from "react";
 
-function Task({ task, onHandleDelete, index }) {
+function Task({ text, category, onHandleDelete, index }) {
   return (
-    <div className="task">
-      <div className="label">{task.category}</div>
-      <div className="text">{task.text}</div>
-      <button className="delete" onClick={() => onHandleDelete(index)}>
-        X
-      </button>
-    </div>
+    <>
+      <div className="task">
+        <div className="label">{category}</div>
+        <div className="text">{text}</div>
+        <button className="delete" onClick={() => onHandleDelete(index)}>
+          X
+        </button>
+      </div>
+    </>
   );
 }
 
